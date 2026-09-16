@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,33 +30,46 @@ namespace Module4_Task4__seeder
         }
         public List<string> GetAllGrades()
         {
-            return assessmentMarks;
+            List<string> grades = new List<string>();
+            foreach (int mark in assessmentMarks)
+            {
+                grades.Add(GetGrade(mark));
+            }
+            return grades;
         }
+
         public List<int> GetHighestMarks()
         {
-            return assessmentMarks;
+            int max= assessmentMarks.Max();
+            var higestMark = assessmentMarks.Where(m => m == max).ToList();
+            return higestMark ;
         }
         public List<int> GetLowestMarks ()
         {
-            return assessmentMarks;
+            var passMark = assessmentMarks.Where(n => n >= 50);
+            if (!passMark.Any()) { return new List<int>(); }
+
+            int min = passMark.Min();
+            var lowestMark= assessmentMarks.Where(m=> m == min).ToList();
+            return lowestMark;
         }
         public List<int> GetFailMarks()
         {
-            return assessmentMarks;
+            var failMark = assessmentMarks.Where (n => n< 50).ToList();
+            return failMark;
         }
-        public List<string> GetAverageMark ()
+        public double GetAverageMark ()
         {
-
+            return assessmentMarks.Average();
         }
         public string GetAverageGrade()
         {
-            if (GetAverageMark() <= 50)
-                return 
+           return GetGrade((int)GetAverageMark());
         }
-        public string GetGrade(int markrange)
+        public string GetGrade(int mark)
         {
             string grade;
-            switch(markrange)
+            switch(mark)
             {
                 case >= 90 and <= 100:
                     grade = "A+";
